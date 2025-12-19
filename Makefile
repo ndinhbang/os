@@ -212,6 +212,8 @@ dev-container:
 	docker run $(DOCKER_PLATFORM_ARG) --pull=always --privileged --rm -it \
 		--entrypoint="/bin/bash" \
 	    -v "${PWD}:${PWD}" \
+		-v /tmp:/tmp \
+		-v /var/run/docker.sock:/var/run/docker.sock \
 	    -w "${PWD}" \
 	    -e SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH) \
 	    -e HTTP_AUTH \
