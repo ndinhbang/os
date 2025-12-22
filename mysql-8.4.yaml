@@ -89,6 +89,9 @@ pipeline:
             -DWITH_VALGRIND=OFF \
             -DWITH_ZLIB=system
       - uses: cmake/build
+        with:
+          opts: |
+            -- -j2
       - uses: cmake/install
       # CMAKE_INSTALL_PREFIX=/usr confuses this.
       - name: "Fix installation path of systemd components"
