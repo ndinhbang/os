@@ -122,7 +122,7 @@ pipeline:
   - name: "Install"
     runs: |
       cd build
-      DESTDIR="${{targets.destdir}}" ninja install
+      DESTDIR="${{targets.destdir}}" ninja -j 2 install
 
   # CMAKE_INSTALL_PREFIX=/usr confuses this.
   - name: "Fix installation path of systemd components"
