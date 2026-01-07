@@ -1,8 +1,10 @@
 # https://github.com/wolfi-dev/os/blob/efdcceb832ece89b3ab84e9b2ee089fd9d758715/mysql-9.5.yaml
+# https://github.com/docker-hardened-images/catalog/blob/main/image/mysql/debian/8.4.yaml
+# https://dev.mysql.com/doc/refman/8.4/en/source-configuration-options.html
 package:
   name: mysql-8.4
   version: "8.4.7"
-  epoch: 0
+  epoch: 1
   description: "The MySQL open source relational database"
   copyright:
     - license: GPL-2.0-only
@@ -62,14 +64,14 @@ pipeline:
       - uses: cmake/configure
         with:
           opts: |
-            -DWITH_UNIT_TESTS=ON \
+            -DWITH_UNIT_TESTS=OFF \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=/usr \
             -DSYSCONFDIR=/etc \
             -DMYSQL_DATADIR=$DATADIR \
             -DMYSQL_UNIX_ADDR=$SOCKDIR/mysqld.sock \
             -DDEFAULT_CHARSET=utf8mb4 \
-            -DDEFAULT_COLLATION=utf8mb4_general_ci \
+            -DDEFAULT_COLLATION=utf8mb4_0900_ai_ci \
             -DENABLED_LOCAL_INFILE=ON \
             -DINSTALL_INFODIR=share/info \
             -DINSTALL_MANDIR=share/man \
@@ -84,26 +86,37 @@ pipeline:
             -DWITH_ASAN=OFF \
             -DWITH_JEMALLOC=OFF \
             -DWITH_LIBWRAP=OFF \
-            -DWITH_SYSTEMD=ON \
+            -DWITH_SYSTEMD=OFF \
             -DWITH_SSL=system \
             -DWITH_VALGRIND=OFF \
-            -DWITH_ZLIB=system
+            -DWITH_ZLIB=system \
+            -DWITH_DEBUG=OFF \
+            -DWITH_ARCHIVE_STORAGE_ENGINE=OFF \
+            -DWITH_BLACKHOLE_STORAGE_ENGINE=OFF \
+            -DWITH_FEDERATED_STORAGE_ENGINE=OFF \
+            -DWITH_EXAMPLE_STORAGE_ENGINE=OFF \
+            -DWITH_NDBCLUSTER_STORAGE_ENGINE=OFF \
+            -DWITH_ROUTER=OFF \
+            -DINSTALL_MYSQLTESTDIR= \
+            -DWITH_NDB=OFF
       - uses: cmake/build
         with:
           opts: |
-            -- -j2
+            -- -j$(nproc)
       - uses: cmake/install
       # CMAKE_INSTALL_PREFIX=/usr confuses this.
-      - name: "Fix installation path of systemd components"
-        runs: |
-          mv "${{targets.destdir}}"/usr/usr/lib/* "${{targets.destdir}}"/usr/lib/
-          rmdir -p --ignore-fail-on-non-empty "${{targets.destdir}}"/usr/usr/lib
+      # - name: "Fix installation path of systemd components"
+      #   runs: |
+      #     mv "${{targets.destdir}}"/usr/usr/lib/* "${{targets.destdir}}"/usr/lib/
+      #     rmdir -p --ignore-fail-on-non-empty "${{targets.destdir}}"/usr/usr/lib
       - name: "Remove extras"
         runs: |
-          rm -r "${{targets.destdir}}"/usr/mysql-test/
-      - name: "Create runtime directories"
-        runs: |
-          mkdir -p "${{targets.destdir}}"$DATADIR "${{targets.destdir}}"$SOCKDIR
+          # rm -r "${{targets.destdir}}"/usr/mysql-test/
+          rm -r "${{targets.destdir}}"/usr/share/man/
+          rm -r "${{targets.destdir}}"/usr/share/doc/
+      # - name: "Create runtime directories"
+      #   runs: |
+      #     mkdir -p "${{targets.destdir}}"$DATADIR "${{targets.destdir}}"$SOCKDIR
 
   - uses: strip
 
@@ -178,16 +191,16 @@ subpackages:
             test /entrypoint.sh
             test /usr/local/bin/docker-entrypoint.sh
 
-  - name: "${{package.name}}-systemd-units"
-    description: "systemd units for MySQL"
-    dependencies:
-      runtime:
-        - mysql=${{package.full-version}}
-    pipeline:
-      - runs: |
-          mkdir -p "${{targets.subpkgdir}}"/usr/lib/systemd/system
-          mv "${{targets.destdir}}"/usr/lib/systemd/system/* "${{targets.subpkgdir}}"/usr/lib/systemd/system
-          rmdir -p --ignore-fail-on-non-empty "${{targets.destdir}}"/usr/lib/systemd/system
+  # - name: "${{package.name}}-systemd-units"
+  #   description: "systemd units for MySQL"
+  #   dependencies:
+  #     runtime:
+  #       - mysql=${{package.full-version}}
+  #   pipeline:
+  #     - runs: |
+  #         mkdir -p "${{targets.subpkgdir}}"/usr/lib/systemd/system
+  #         mv "${{targets.destdir}}"/usr/lib/systemd/system/* "${{targets.subpkgdir}}"/usr/lib/systemd/system
+  #         rmdir -p --ignore-fail-on-non-empty "${{targets.destdir}}"/usr/lib/systemd/system
 
 update:
   enabled: true
