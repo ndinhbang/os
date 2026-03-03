@@ -1,13 +1,16 @@
 package:
   name: jupyter-base-notebook
-  version: "7.5.1"
-  epoch: 1 # GHSA-38jv-5279-wg99
+  version: "7.5.3"
+  epoch: 2 # GHSA-r6ph-v2qm-q3c2
   description: Jupyter Notebook
   dependencies:
     runtime:
       - python-3.12
   copyright:
     - license: BSD-3-Clause
+  resources:
+    cpu: "3"
+    memory: 7Gi
 
 environment:
   contents:

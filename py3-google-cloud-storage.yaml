@@ -1,12 +1,15 @@
 package:
   name: py3-google-cloud-storage
-  version: "3.7.0"
-  epoch: 0
+  version: "3.9.0"
+  epoch: 0 # go/wolfi-rsc/py3-google-cloud-storage
   description: Google Cloud Storage API client library
   copyright:
     - license: Apache-2.0
   dependencies:
     provider-priority: 0
+  resources:
+    cpu: "1"
+    memory: 2Gi
 
 vars:
   pypi-package: google-cloud-storage
@@ -27,7 +30,7 @@ environment:
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: 89a947a877f0d8f19be3a2bc45e5dfb8b8a977e5
+      expected-commit: 77c1edaa6de4058e545ad1b68bde5507b75b8e37
       repository: https://github.com/googleapis/python-storage
       tag: v${{package.version}}
 

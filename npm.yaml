@@ -1,6 +1,6 @@
 package:
   name: npm
-  version: "11.7.0"
+  version: "11.10.1"
   epoch: 0
   description: "the npm package manager for javascript, mainline"
   copyright:
@@ -17,7 +17,7 @@ pipeline:
   - uses: fetch
     with:
       uri: https://registry.npmjs.org/npm/-/npm-${{package.version}}.tgz
-      expected-sha512: c22099a6fff8d5b2286c2a09df5352b4858a7c0c716320f58989d60ad8b29ecf2ce6fdfe97ccb41c23ffb1272e1fa079f868487dd6b81d02a2a9e199c095a117
+      expected-sha512: c286afb98d8e803150d4afed07d407b14b96f7cf6729fbec29337f879a86c92fb7f8186f5cdfc30364cdcf1e7af496857d3aab113e5b110347c1584593e53582
       delete: true
 
   - runs: |

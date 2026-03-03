@@ -1,7 +1,7 @@
 package:
   name: erlang-28
-  version: "28.3"
-  epoch: 2
+  version: "28.3.2"
+  epoch: 0 # go/wolfi-rsc/erlang-28
   description: General-purpose programming language and runtime environment
   copyright:
     - license: Apache-2.0
@@ -11,6 +11,9 @@ package:
       - ca-certificates-bundle
     provides:
       - erlang=${{package.full-version}}
+  resources:
+    cpu: "14"
+    memory: 12Gi
 
 environment:
   contents:
@@ -32,7 +35,7 @@ pipeline:
     with:
       repository: https://github.com/erlang/otp
       tag: OTP-${{package.version}}
-      expected-commit: ab489c0b260c637a9487f8753909ea94dacbbec2
+      expected-commit: b74eae92e1dee97d57a9ab3ea3c36e8b701a9ca6
 
   - runs: |
       export CPPFLAGS="-D_BSD_SOURCE $CPPFLAGS"

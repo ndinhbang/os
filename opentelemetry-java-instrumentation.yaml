@@ -1,13 +1,16 @@
 package:
   name: opentelemetry-java-instrumentation
-  version: "2.23.0"
-  epoch: 0
+  version: "2.25.0"
+  epoch: 0 # go/wolfi-rsc/opentelemetry-java-instrumentation
   description: OpenTelemetry auto-instrumentation and instrumentation libraries for Java
   copyright:
     - license: Apache-2.0
   dependencies:
     runtime:
       - busybox
+  resources:
+    cpu: "5"
+    memory: 20Gi
 
 vars:
   java-version: "21"
@@ -29,7 +32,7 @@ pipeline:
     with:
       repository: https://github.com/open-telemetry/opentelemetry-java-instrumentation
       tag: v${{package.version}}
-      expected-commit: 351b6970940f05ab74e9d08ed320d9ea0d94d5fc
+      expected-commit: 399dae91610f1acc510381676204a8fdd040fbb9
 
   - name: Disable ErrorProne warning in gradle build config, as it produces FTBFS-level warnings
     runs: |

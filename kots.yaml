@@ -1,7 +1,7 @@
 package:
   name: kots
-  version: "1.129.1"
-  epoch: 2 # GHSA-r6j8-c6r2-37rr
+  version: "1.129.3"
+  epoch: 3 # GHSA-fw7p-63qq-7hpr
   description: Kubernetes Off-The-Shelf (KOTS) Software
   copyright:
     - license: Apache-2.0
@@ -34,13 +34,14 @@ pipeline:
     with:
       repository: https://github.com/replicatedhq/kots
       tag: v${{package.version}}
-      expected-commit: 1865300d6f5385267a2fe6a8cc4e81e79ab5204d
+      expected-commit: 6214eb6eed437ad93f99de09638aca47f1ecd170
 
   - uses: go/bump
     with:
       deps: |-
-        github.com/sigstore/fulcio@v1.8.3
-        k8s.io/kubernetes@v1.34.2
+        github.com/sigstore/sigstore@v1.10.4
+        github.com/go-git/go-git/v5@v5.16.5
+        filippo.io/edwards25519@v1.1.1
 
   - runs: |
       set -x

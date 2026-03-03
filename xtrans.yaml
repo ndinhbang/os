@@ -1,10 +1,13 @@
 package:
   name: xtrans
   version: "1.6.0"
-  epoch: 1
+  epoch: 3 # go/wolfi-rsc/xtrans
   description: X transport library
   copyright:
     - license: MIT
+  resources:
+    cpu: "1"
+    memory: 5Gi
 
 environment:
   contents:
@@ -41,3 +44,6 @@ update:
 test:
   pipeline:
     - uses: test/pkgconf
+    - uses: test/tw/xml-syntax-check
+      with:
+        path: usr/share/doc/xtrans

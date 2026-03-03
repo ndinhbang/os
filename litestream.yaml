@@ -1,15 +1,18 @@
 package:
   name: litestream
-  version: "0.5.5"
-  epoch: 0 # GHSA-j5w8-q4qc-rx2x
+  version: "0.5.8"
+  epoch: 0 # CVE-2025-61732
   description: Streaming replication for SQLite.
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "1"
+    memory: 2Gi
 
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: 803aad1704ccd8fc002f437872ef62e9c1ee0efd
+      expected-commit: 7265b6b4ee9632346ebc18d8647015466302465d
       repository: https://github.com/benbjohnson/litestream
       tag: v${{package.version}}
 

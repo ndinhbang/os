@@ -1,10 +1,13 @@
 package:
   name: gdcm
   version: "3.2.2"
-  epoch: 0
+  epoch: 2 # go/wolfi-rsc/gdcm
   description: "Grassroots DICOM Gdcm, Cross-platform DICOM implementation library for C++"
   copyright:
     - license: BSD-3-Clause
+  resources:
+    cpu: "9"
+    memory: 16Gi
 
 environment:
   contents:
@@ -43,6 +46,9 @@ subpackages:
     description: ohif viewer static files
     pipeline:
       - uses: split/static
+    test:
+      pipeline:
+        - uses: test/tw/staticpackage
 
   - name: ${{package.name}}-dev
     description: Development files for ohif-viewer

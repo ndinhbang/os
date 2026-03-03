@@ -1,12 +1,15 @@
 package:
   name: opentofu-1.11
-  version: "1.11.2"
-  epoch: 0 # CVE-2025-61729
+  version: "1.11.5"
+  epoch: 0 # CVE-2025-68121
   copyright:
     - license: MPL-2.0
   dependencies:
     provides:
       - opentofu=${{package.full-version}}
+  resources:
+    cpu: "8"
+    memory: 8Gi
 
 environment:
   environment:
@@ -15,7 +18,7 @@ environment:
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: c0b3d3d37b345579908012f0c9b8caa26499f7e4
+      expected-commit: 67fe9db49b7dafd46470cf9ac7f437aaa95f5c40
       repository: https://github.com/opentofu/opentofu
       tag: v${{package.version}}
 

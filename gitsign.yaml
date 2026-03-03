@@ -1,10 +1,13 @@
 package:
   name: gitsign
-  version: "0.13.0"
-  epoch: 7 # CVE-2025-61729
+  version: "0.14.0"
+  epoch: 4 # GHSA-fw7p-63qq-7hpr
   description: Keyless Git signing with Sigstore!
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "1"
+    memory: 5Gi
 
 environment:
   environment:
@@ -15,14 +18,13 @@ pipeline:
     with:
       repository: https://github.com/sigstore/gitsign/
       tag: v${{package.version}}
-      expected-commit: b17948db1402b33caa005637f40e8df9eab56daf
+      expected-commit: dd51a25b4f9fa103ca6f5cdca4183fa15cb3e627
 
   - uses: go/bump
     with:
       deps: |-
-        golang.org/x/net@v0.38.0
-        github.com/cloudflare/circl@v1.6.1
-        golang.org/x/crypto@v0.45.0
+        github.com/go-git/go-git/v5@v5.16.5
+        filippo.io/edwards25519@v1.1.1
 
   - uses: go/build
     with:

@@ -1,7 +1,7 @@
 package:
   name: flyway
-  version: "11.20.1"
-  epoch: 0 # GHSA-84h7-rjj3-6jx4
+  version: "12.0.2"
+  epoch: 0 # go/wolfi-rsc/flyway
   description: "Flyway is a database migration tool to evolve your database schema easily and reliably across all your instances."
   copyright:
     - license: Apache-2.0
@@ -9,6 +9,9 @@ package:
     runtime:
       - bash
       - openjdk-17-jre
+  resources:
+    cpu: "3"
+    memory: 9Gi
 
 environment:
   contents:
@@ -31,13 +34,14 @@ vars:
   drivers-cassandra: "asm caffeine cassandra-driver-kerberos cassandra-jdbc-wrapper commons-collections4 commons-io commons-lang3 config HdrHistogram java-driver-core java-driver-shaded jnr jsr305 metrics-core native-protocol semver4j"
   drivers-gcp: "animal-sniffer-annotations annotations api-common auto-value-annotations checker-qual commons-codec conscrypt-openjdk-uber detector-resources-support error_prone_annotations failureaccess gax google-auth-library google-cloud-core google-cloud-monitoring google-cloud-spanner google-http-client grpc guava httpclient httpcore j2objc-annotations javax.annotation-api listenablefuture opencensus perfmark-api proto protobuf-java re2j threetenbp"
   drivers-mongo: "bson flyway-database-nc-mongodb mongodb-driver-core mongodb-driver-sync"
+  drivers-couchbase: "java-client core-io"
 
 pipeline:
   - uses: git-checkout
     with:
       repository: https://github.com/flyway/flyway
       tag: flyway-${{package.version}}
-      expected-commit: 69d5c7ee9b3412aaa8dbc26b0ec979d989227b6a
+      expected-commit: 635355cfe317236b342ecd3897134d459d7d9f86
 
   - uses: maven/pombump
     with:
@@ -45,7 +49,7 @@ pipeline:
 
   - name: Build
     runs: |
-      ./mvnw -B clean dependency:copy-dependencies package -e --file pom.xml -DskipTests -pl !flyway-database/flyway-database-mongodb
+      ./mvnw -B clean dependency:copy-dependencies package -e --file pom.xml -DskipTests -pl !flyway-database/flyway-database-nc-mongodb
 
   - name: Create directories and move scripts
     runs: |
@@ -61,13 +65,14 @@ pipeline:
       # └── drivers/                     # JDBC drivers directory `vars.drivers-core`
       # |   ├── cassandra/                # Cassandra database drivers `vars.drivers-cassandra`
       # |   ├── gcp/                      # Google Cloud Platform drivers `vars.drivers-gcp`
-      # |   └── mongo/                    # MongoDB drivers `vars.drivers-mongo`
+      # |   ├── mongo/                    # MongoDB drivers `vars.drivers-mongo`
+      # |   └── couchbase/                # Couchbase drivers `vars.drivers-couchbase`
       # ├── licenses/                    # License files directory
       #--------------------
 
       # Create directories based on the layout
       mkdir -p ${{targets.contextdir}}/${{vars.flyway-base}}
-      for dir in lib lib/aad lib/flyway lib/netty conf drivers drivers/cassandra drivers/gcp drivers/mongo licenses; do
+      for dir in lib lib/aad lib/flyway lib/netty conf drivers drivers/cassandra drivers/gcp drivers/mongo drivers/couchbase licenses; do
         mkdir -p ${{targets.contextdir}}/${{vars.flyway-base}}/$dir
       done
 
@@ -177,7 +182,6 @@ pipeline:
       rm ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/gcp/google-http-client-jackson2-*.jar
       rm ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/gcp/grpc-google-cloud-storage-*.jar
       rm ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/gcp/grpc-opentelemetry-*.jar
-      rm ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/gcp/opencensus-proto-*.jar
       rm ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/gcp/proto-google-cloud-storage-*.jar
 
       echo "=== List of copied gcp driver jars in flyway/drivers/gcp. ==="
@@ -198,6 +202,13 @@ pipeline:
       echo "Files:"
       ls -1 ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/mongo | sed 's/^/  /'
       echo "==="
+
+  - name: Move flyway lib/couchbase jars
+    runs: |
+      # Install Couchbase driver related jars to `flyway/drivers/couchbase` using `vars.drivers-couchbase`
+      for dep in ${{vars.drivers-couchbase}}; do
+        mv flyway-commandline/target/dependency/$dep-*.jar ${{targets.contextdir}}/${{vars.flyway-base}}/drivers/couchbase
+      done
 
   - name: Create symlinks for flyway
     runs: |

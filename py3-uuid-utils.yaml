@@ -1,12 +1,15 @@
 package:
   name: py3-uuid-utils
-  version: "0.13.0"
-  epoch: 0
+  version: "0.14.1"
+  epoch: 0 # go/wolfi-rsc/py3-uuid-utils
   description: Python3 UUID utils
   copyright:
     - license: BSD-3-Clause
   dependencies:
     provider-priority: 0
+  resources:
+    cpu: "2"
+    memory: 9Gi
 
 vars:
   pypi-package: uuid-utils
@@ -35,7 +38,7 @@ environment:
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: c3cec6fe82ac41d94db487d2dfba8c7447298d9a
+      expected-commit: c09cd2940a7403c3bb7438f39f9d6f748473280e
       repository: https://github.com/aminalaee/uuid-utils
       tag: ${{package.version}}
 

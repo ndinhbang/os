@@ -1,10 +1,13 @@
 package:
   name: buf
-  version: "1.63.0"
-  epoch: 0 # GHSA-g754-hx8w-x2g6
+  version: "1.65.0"
+  epoch: 1 # CVE-2025-61732
   description: A new way of working with Protocol Buffers.
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "2"
+    memory: 6Gi
 
 environment:
   contents:
@@ -17,7 +20,7 @@ pipeline:
     with:
       repository: https://github.com/bufbuild/buf
       tag: v${{package.version}}
-      expected-commit: 9a277e1f3a6ffc26dc9a186e8b220abee4b4ad2e
+      expected-commit: 5155f6174d9a74aa2668b0ba0ac26a84ed15ba7e
 
   - uses: go/build
     with:

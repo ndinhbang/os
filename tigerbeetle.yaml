@@ -1,10 +1,13 @@
 package:
   name: tigerbeetle
-  version: "0.16.67"
-  epoch: 0
+  version: "0.16.73"
+  epoch: 0 # go/wolfi-rsc/tigerbeetle
   description: "The distributed financial accounting database designed for mission critical safety and performance."
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "2"
+    memory: 8Gi
 
 environment:
   contents:
@@ -19,7 +22,7 @@ pipeline:
     with:
       repository: https://github.com/tigerbeetledb/tigerbeetle
       tag: ${{package.version}}
-      expected-commit: 2398229d5c1a83ae7091fe0f696207178de6d041
+      expected-commit: 693c64bbf8e1bd5fd0cf040e0ce70d000f257e16
 
   - runs: |
       zig build -Drelease

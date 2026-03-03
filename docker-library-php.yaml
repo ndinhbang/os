@@ -1,8 +1,8 @@
 #nolint:valid-pipeline-git-checkout-tag
 package:
   name: docker-library-php
-  version: "0_git20260110"
-  epoch: 0
+  version: "0_git20260213"
+  epoch: 0 # go/wolfi-rsc/docker-library-php
   description: "Docker Official Image packaging for PHP"
   copyright:
     - license: MIT
@@ -11,6 +11,9 @@ package:
       - apache2
       - bash # apache2-foreground
       - dash-binsh # docker-php-*
+  resources:
+    cpu: "1"
+    memory: 2Gi
 
 environment:
   contents:
@@ -25,7 +28,7 @@ pipeline:
     with:
       repository: https://github.com/docker-library/php
       branch: master
-      expected-commit: 6485b53a1da0f2c4c5b564808de75ae62c023286
+      expected-commit: 1b87dc960bbef9682c9001e6ac13d772543e35d9
 
   - name: Install scripts
     runs: |

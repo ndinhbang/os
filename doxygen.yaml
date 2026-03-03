@@ -1,7 +1,7 @@
 package:
   name: doxygen
-  version: "1.16.0"
-  epoch: 0
+  version: "1.16.1"
+  epoch: 1 # go/wolfi-rsc/doxygen
   description: A documentation system for C++, C, Java, IDL and PHP
   copyright:
     - license: GPL-2.0-or-later
@@ -10,6 +10,9 @@ package:
       - bzip2
       - graphviz
       - zlib
+  resources:
+    cpu: "8"
+    memory: 26Gi
 
 environment:
   contents:
@@ -31,7 +34,7 @@ environment:
 pipeline:
   - uses: fetch
     with:
-      expected-sha256: 32eff77733139d8c8e99d18c3aec30f51418c4d3a62834f263487e99e92d2fef
+      expected-sha256: 201ce33b514ea87cc1697c0dcf829692c2695c1812683a9cc622194b05e263a8
       uri: https://doxygen.nl/files/doxygen-${{package.version}}.src.tar.gz
 
   - runs: |

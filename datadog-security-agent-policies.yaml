@@ -1,10 +1,13 @@
 package:
   name: datadog-security-agent-policies
-  version: "0.75.0"
-  epoch: 0
+  version: "0.77.0"
+  epoch: 0 # go/wolfi-rsc/datadog-security-agent-policies
   description: "Policies for Security Agent - compliance and runtime checks"
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "1"
+    memory: 1Gi
 
 environment:
   contents:
@@ -16,7 +19,7 @@ pipeline:
     with:
       repository: https://github.com/DataDog/security-agent-policies
       tag: v${{package.version}}
-      expected-commit: d984f73f8a5f63787b402b14530cc33a98673733
+      expected-commit: d8569ce162667da79b9c1e05c5eb672c5b77f66b
 
   - runs: |
       mkdir -p ${{targets.destdir}}/etc/datadog-agent/compliance.d

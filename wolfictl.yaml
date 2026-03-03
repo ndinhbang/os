@@ -1,17 +1,20 @@
 package:
   name: wolfictl
-  version: "0.38.27"
-  epoch: 0 # GHSA-6gxw-85q2-q646
+  version: "0.39.2"
+  epoch: 0 # GHSA-fw7p-63qq-7hpr
   description: Helper CLI for managing Wolfi
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "5"
+    memory: 12Gi
 
 pipeline:
   - uses: git-checkout
     with:
       repository: https://github.com/wolfi-dev/wolfictl
       tag: v${{package.version}}
-      expected-commit: e9bffe13aa3bd3942795fe0b56d110392e82d01c
+      expected-commit: 4fc6fd9b1b61d8d80d98c8f10f963d7fae1417c3
 
   - uses: go/build
     with:

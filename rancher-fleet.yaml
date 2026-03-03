@@ -1,15 +1,18 @@
 package:
   name: rancher-fleet
-  version: "0.14.1"
-  epoch: 0 # CVE-2025-61729
+  version: "0.14.3"
+  epoch: 0 # GHSA-37cx-329c-33x3
   description: Deploy workloads from Git to large fleets of Kubernetes clusters
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "3"
+    memory: 4Gi
 
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: 9e77da0d13fd9bf21e7acc4accd8f7f0b1f75551
+      expected-commit: 7c2c7e3b2b7c7c90eed31ac71d5dc8d07b6f12a5
       repository: https://github.com/rancher/fleet
       tag: v${{package.version}}
 

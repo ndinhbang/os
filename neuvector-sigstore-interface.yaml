@@ -2,10 +2,13 @@
 package:
   name: neuvector-sigstore-interface
   version: 0_git20251212
-  epoch: 0
+  epoch: 5 # GHSA-jqc5-w2xx-5vq4
   description: NeuVector sigstore interface for the SUSE NeuVector Container Security Platform
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "3"
+    memory: 5Gi
 
 environment:
   contents:
@@ -18,6 +21,14 @@ pipeline:
       repository: https://github.com/neuvector/sigstore-interface
       expected-commit: 6e18947e3fefe787071c3e89518be069a7b92114
       depth: -1
+
+  - uses: go/bump
+    with:
+      deps: |-
+        github.com/sigstore/cosign/v3@v3.0.4
+        github.com/sigstore/rekor@v1.5.0
+        github.com/sigstore/sigstore@v1.10.4
+        github.com/theupdateframework/go-tuf/v2@v2.4.1
 
   - uses: go/build
     with:

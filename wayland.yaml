@@ -1,10 +1,13 @@
 package:
   name: wayland
   version: "1.24.0"
-  epoch: 2
+  epoch: 4 # go/wolfi-rsc/wayland
   description: A computer display server protocol
   copyright:
     - license: MIT
+  resources:
+    cpu: "2"
+    memory: 4Gi
 
 environment:
   contents:
@@ -81,6 +84,10 @@ subpackages:
       pipeline:
         - uses: test/tw/ldd-check
     description: wayland ${{range.key}} libs
+
+test:
+  pipeline:
+    - uses: test/tw/emptypackage
 
 update:
   enabled: true

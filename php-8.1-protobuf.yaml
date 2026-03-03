@@ -1,7 +1,7 @@
 package:
   name: php-8.1-protobuf
-  version: "4.33.3"
-  epoch: 0
+  version: "4.33.5"
+  epoch: 1 # go/wolfi-rsc/php-8.1-protobuf
   description: "Protocol Buffers - Google's data interchange format"
   copyright:
     - license: BSD-3-Clause
@@ -9,6 +9,9 @@ package:
     runtime:
       - ${{package.name}}-config
       - php-${{vars.phpMM}}
+  resources:
+    cpu: "1"
+    memory: 1Gi
 
 var-transforms:
   - from: ${{package.name}}
@@ -31,7 +34,7 @@ pipeline:
   - uses: fetch
     with:
       uri: https://pecl.php.net/get/protobuf-${{package.version}}.tgz
-      expected-sha512: 20be880b82c547c0522b4ec09190873c4c75455e8008b7ebbebbc75331a17e88b038d1fbcdcd46459e4dfa33ca46d5a1314b8ad264a6258e5e6be3751534c0a8
+      expected-sha512: f1df75188e004928b4a330d354d0eb52d07236e8e797ef46bff5902bf6fafbf4ee972e8bfcfa8ab8e36fd159a13f76fc28900740d02922b353c419e73a125ad7
 
   - name: Prepare build
     runs: phpize

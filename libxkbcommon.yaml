@@ -2,10 +2,13 @@
 package:
   name: libxkbcommon
   version: "1.13.1"
-  epoch: 0
+  epoch: 2 # go/wolfi-rsc/libxkbcommon
   description: keyboard handling library
   copyright:
     - license: MIT
+  resources:
+    cpu: "1"
+    memory: 6Gi
 
 environment:
   contents:
@@ -49,6 +52,9 @@ subpackages:
     pipeline:
       - uses: split/static
     description: libxkbcommon static
+    test:
+      pipeline:
+        - uses: test/tw/staticpackage
 
   - name: libxkbcommon-dev
     pipeline:

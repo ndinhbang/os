@@ -1,10 +1,13 @@
 package:
   name: vulkan-loader
-  version: "1.4.337"
-  epoch: 0
+  version: "1.4.344"
+  epoch: 0 # go/wolfi-rsc/vulkan-loader
   description: Vulkan Installable Client Driver (ICD) Loader
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "1"
+    memory: 5Gi
 
 environment:
   contents:
@@ -25,7 +28,7 @@ pipeline:
     with:
       repository: https://github.com/KhronosGroup/Vulkan-Loader
       tag: v${{package.version}}
-      expected-commit: 7a07afe04ad134d4eabe25f62720177f60ed6627
+      expected-commit: bac41319cafb4527a2a959237b17611dd08bfe11
 
   - runs: |
       cmake -B build -G Ninja \

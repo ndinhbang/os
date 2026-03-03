@@ -1,15 +1,18 @@
 package:
   name: victoriametrics-operator
-  version: "0.66.1"
-  epoch: 1 # GHSA-66jq-2c23-2xh5
+  version: "0.68.0"
+  epoch: 0 # CVE-2025-68121
   description: Kubernetes operator for Victoria Metrics
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "3"
+    memory: 5Gi
 
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: 84a49bcc07103f054aa68e2dea3c9c2dfc320e05
+      expected-commit: 103b19ece51eab562de520c6f3c81a1239a2a5d6
       repository: https://github.com/VictoriaMetrics/operator
       tag: v${{package.version}}
 
@@ -26,23 +29,25 @@ subpackages:
       - uses: go/build
         with:
           modroot: .
-          output: config-reloader
+          output: app
           packages: ./cmd/config-reloader
+          ldflags: |
+            -X 'github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=config-reloader-${{package.version}}'
     test:
       pipeline:
         - uses: test/tw/help-check
           with:
-            bins: config-reloader
+            bins: app
         - uses: test/tw/ver-check
           with:
-            bins: config-reloader
+            bins: app
 
   - name: ${{package.name}}-config-reloader-compat
     description: compatibility symlinks package for victoriametrics-operator config-reloader Dockerfile
     pipeline:
       - runs: |
-          mkdir -p "${{targets.contextdir}}/app"
-          ln -sf ../usr/bin/config-reloader "${{targets.contextdir}}/app/config-reloader"
+          mkdir -p "${{targets.contextdir}}"
+          ln -sf ./usr/bin/app "${{targets.contextdir}}/app"
     test:
       environment:
         contents:
@@ -55,8 +60,8 @@ subpackages:
     description: compatibility symlinks package for victoriametrics-operator Dockerfile
     pipeline:
       - runs: |
-          mkdir -p "${{targets.contextdir}}/app"
-          ln -sf ../usr/bin/app "${{targets.contextdir}}/app/app"
+          mkdir -p "${{targets.contextdir}}"
+          ln -sf ./usr/bin/app "${{targets.contextdir}}/app"
     test:
       environment:
         contents:

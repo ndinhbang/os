@@ -1,13 +1,16 @@
 package:
   name: npm-lodash
-  version: 4.17.21
-  epoch: 2
+  version: "4.17.23"
+  epoch: 2 # go/wolfi-rsc/npm-lodash
   description: "A modern JavaScript utility library delivering modularity, performance & extras"
   copyright:
     - license: MIT
   checks:
     disabled:
       - usrlocal
+  resources:
+    cpu: "1"
+    memory: 1Gi
 
 environment:
   contents:
@@ -32,3 +35,9 @@ update:
   enabled: true
   release-monitor:
     identifier: 2374
+
+test:
+  pipeline:
+    - uses: test/tw/contains-files
+      with:
+        dir: /usr/local/lib/node_modules/lodash/

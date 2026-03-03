@@ -1,18 +1,21 @@
 package:
   name: cluster-api-1.12
-  version: "1.12.1"
-  epoch: 0 # GHSA-j5w8-q4qc-rx2x
+  version: "1.12.3"
+  epoch: 0 # CVE-2025-68121
   description: Cluster API meta package
   dependencies:
     provides:
       - cluster-api=${{package.full-version}}
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "4"
+    memory: 14Gi
 
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: b9b906573c236b661c2b9565be6fefcdecfc99d2
+      expected-commit: 1a1852c74072febc3fbf9823c9dd32f4cd6cc747
       repository: https://github.com/kubernetes-sigs/cluster-api
       tag: v${{package.version}}
 

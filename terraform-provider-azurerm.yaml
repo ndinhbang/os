@@ -1,18 +1,21 @@
 package:
   name: terraform-provider-azurerm
-  version: "4.57.0"
-  epoch: 0 # GHSA-j5w8-q4qc-rx2x
+  version: "4.61.0"
+  epoch: 0 # go/wolfi-rsc/terraform-provider-azurerm
   description: Terraform provider for Azure Resource Manager
   copyright:
     - license: MPL-2.0
   dependencies:
     runtime:
       - terraform-local-provider-config
+  resources:
+    cpu: "8"
+    memory: 17Gi
 
 pipeline:
   - uses: git-checkout
     with:
-      expected-commit: 3948804cb9f1201332629b828764dfb36cbb30a0
+      expected-commit: b8cc033c4c83ef7a1afc52dec3cb2d8bf1b62d99
       repository: https://github.com/hashicorp/terraform-provider-azurerm
       tag: v${{package.version}}
 

@@ -1,7 +1,7 @@
 package:
   name: neuvector-scanner
-  version: "4.038"
-  epoch: 0 # GHSA-cgrx-mc8f-2prm
+  version: "4.081"
+  epoch: 0 # go/wolfi-rsc/neuvector-scanner
   description: NeuVector vulnerability scanner for the SUSE NeuVector Container Security Platform
   copyright:
     - license: Apache-2.0
@@ -12,6 +12,9 @@ package:
       - neuvector-scanner-monitor
       - neuvector-scanner-task
       - neuvector-sigstore-interface
+  resources:
+    cpu: "2"
+    memory: 5Gi
 
 environment:
   contents:
@@ -23,7 +26,7 @@ pipeline:
     with:
       repository: https://github.com/neuvector/scanner
       tag: v${{package.version}}
-      expected-commit: 4ed024084b23f8d3172350e895554a1e93d45e80
+      expected-commit: 524bac997b54a14b119b28a0dc6cfa87a09d7a72
 
   - uses: go/build
     with:

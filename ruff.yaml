@@ -1,10 +1,13 @@
 package:
   name: ruff
-  version: "0.14.11"
-  epoch: 0 # GHSA-xwfj-jgwm-7wp5
+  version: "0.15.2"
+  epoch: 0 # go/wolfi-rsc/ruff
   description: An extremely fast Python linter, written in Rust.
   copyright:
     - license: MIT
+  resources:
+    cpu: "19"
+    memory: 24Gi
 
 environment:
   contents:
@@ -21,7 +24,7 @@ pipeline:
     with:
       repository: https://github.com/astral-sh/ruff
       tag: ${{package.version}}
-      expected-commit: c920cf8cdb247a9fd8e15a4c9d2efa838f7a78a3
+      expected-commit: 9d18ee9115f9cbb4c21478baa7c1fa2b46e0759c
 
   - uses: rust/cargobump
 

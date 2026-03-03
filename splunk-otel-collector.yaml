@@ -1,13 +1,16 @@
 package:
   name: splunk-otel-collector
-  version: "0.142.0"
-  epoch: 0 # GHSA-cfpf-hrx2-8rv6
+  version: "0.145.1"
+  epoch: 1 # GHSA-fw7p-63qq-7hpr
   description: Splunk OpenTelemetry Collector is a distribution of the OpenTelemetry Collector. It provides a unified way to receive, process, and export metric, trace, and log data for Splunk Observability Cloud
   copyright:
     - license: Apache-2.0
   dependencies:
     runtime:
       - systemd
+  resources:
+    cpu: "3"
+    memory: 11Gi
 
 environment:
   contents:
@@ -18,12 +21,24 @@ pipeline:
     with:
       repository: https://github.com/signalfx/splunk-otel-collector
       tag: v${{package.version}}
-      expected-commit: f215b124ebf3009c8f02bf67e7d036af7809485f
+      expected-commit: af54fe28eed19f2e6323c7090ed217055327f7eb
 
   - uses: go/bump
     with:
       deps: |-
-        github.com/expr-lang/expr@v1.17.7
+        filippo.io/edwards25519@v1.1.1
+      modroot: pkg/receiver/smartagentreceiver
+
+  - uses: go/bump
+    with:
+      deps: |-
+        filippo.io/edwards25519@v1.1.1
+      modroot: internal/signalfx-agent
+
+  - uses: go/bump
+    with:
+      deps: |-
+        filippo.io/edwards25519@v1.1.1
 
   - runs: go generate ./...
 

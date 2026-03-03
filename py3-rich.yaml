@@ -1,12 +1,15 @@
 package:
   name: py3-rich
-  version: "14.2.0"
-  epoch: 0
+  version: "14.3.3"
+  epoch: 0 # go/wolfi-rsc/py3-rich
   description: "Rich is a Python library for rich text and beautiful formatting in the terminal."
   copyright:
     - license: MIT
   dependencies:
     provider-priority: 0
+  resources:
+    cpu: "1"
+    memory: 1Gi
 
 vars:
   pypi-package: rich
@@ -33,7 +36,7 @@ pipeline:
     with:
       repository: https://github.com/Textualize/rich
       tag: v${{package.version}}
-      expected-commit: 494f83c923ca54ecc943bf5e60c0004e65fbb54e
+      expected-commit: ce0118819d172d134507bcf5982d3faf82bbc43e
 
 subpackages:
   - range: py-versions

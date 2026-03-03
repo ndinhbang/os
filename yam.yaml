@@ -1,17 +1,20 @@
 package:
   name: yam
-  version: "0.2.44"
-  epoch: 0
+  version: "0.2.50"
+  epoch: 0 # go/wolfi-rsc/yam
   description: A sweet little formatter for YAML
   copyright:
     - license: Apache-2.0
+  resources:
+    cpu: "1"
+    memory: 4Gi
 
 pipeline:
   - uses: git-checkout
     with:
       repository: https://github.com/chainguard-dev/yam
       tag: v${{package.version}}
-      expected-commit: 45652774bb48bab9cd449885af1f6c8275976006
+      expected-commit: 1a2a6e3c17bb9328e5c1b34dd85c403a9ceacf6d
 
   - uses: go/build
     with:

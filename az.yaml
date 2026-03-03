@@ -1,48 +1,59 @@
 package:
   name: az
-  version: "2.81.0"
-  epoch: 2 # GHSA-38jv-5279-wg99 GHSA-mrfv-m5wm-5w6w
+  version: "2.83.0"
+  epoch: 1 # GHSA-jm66-cg57-jjv5
   description: Azure CLI
   copyright:
     - license: MIT
   dependencies:
     runtime:
-      - py3-cryptography
+      - py${{vars.python-version}}-cryptography
+      - python-${{vars.python-version}}
+
+vars:
+  python-version: "3.13"
+  venv-path: /opt/chainguard/az
 
 environment:
   contents:
     packages:
-      - build-base
       - busybox
-      - ca-certificates-bundle
-      - py3-cryptography
-      - py3-pip
-      - python-3
-      - python-3-dev
+      - py${{vars.python-version}}-cryptography
+      - py${{vars.python-version}}-setuptools
+      - py${{vars.python-version}}-wheel
+      - python-${{vars.python-version}}-dev
+      - uv
 
 pipeline:
   - uses: git-checkout
     with:
       repository: https://github.com/Azure/azure-cli/
       tag: azure-cli-${{package.version}}
-      expected-commit: e1fdb81cc99a69670fe3f9771f9af171ac0741af
-      cherry-picks: |
-        dev/319e9c41caf66b6dd6841bb529637df3e399092c: {Packaging} Bump pynacl to1.6.2, cffi to 2.0.0
+      expected-commit: c1906171202b73f6c478f4313ff6c4f1ae840d14
 
   - name: Python Build
     runs: |
-      pip install wheel
       cd src/azure-cli
-      python setup.py bdist_wheel
+      python${{vars.python-version}} setup.py bdist_wheel
       cd ../azure-cli-core
-      python setup.py bdist_wheel
+      python${{vars.python-version}} setup.py bdist_wheel
 
   - runs: |
-      # Install the built wheels directly into the package filesystem
-      pip install --prefix=${{targets.destdir}}/usr --no-compile src/azure-cli/dist/*.whl src/azure-cli-core/dist/*.whl
+      uv venv "${{vars.venv-path}}" --python python${{vars.python-version}} --system-site-packages
 
-      # Remediate GHSA-38jv-5279-wg99
-      pip install --prefix=${{targets.destdir}}/usr --upgrade "urllib3==2.6.3"
+      # Exclude cryptography from pip install to avoid bundling OpenSSL
+      echo "cryptography" > /tmp/exclude-pkgs.txt
+      uv pip install --python "${{vars.venv-path}}/bin/python" \
+        --reinstall --excludes /tmp/exclude-pkgs.txt --no-compile \
+        src/azure-cli/dist/*.whl src/azure-cli-core/dist/*.whl
+
+      # Move venv into package output
+      mkdir -p "${{targets.destdir}}${{vars.venv-path}}"
+      mv "${{vars.venv-path}}"/* "${{targets.destdir}}${{vars.venv-path}}/"
+
+      # Symlink az command to PATH
+      mkdir -p "${{targets.destdir}}/usr/bin"
+      ln -sf "${{vars.venv-path}}/bin/az" "${{targets.destdir}}/usr/bin/az"
 
   - uses: strip
 
@@ -54,6 +65,9 @@ update:
 
 test:
   pipeline:
+    - uses: test/tw/pip-check
+      with:
+        python: /opt/chainguard/az/bin/python
     - name: Validate Core CLI Commands
       runs: |
         # Check az version in multiple formats
@@ -127,7 +141,7 @@ subpackages:
         - bash
         - busybox
         - merged-usrsbin
-        - python-3
+        - python-${{vars.python-version}}
         - wolfi-baselayout
     pipeline:
       - uses: iamguarded/build-compat

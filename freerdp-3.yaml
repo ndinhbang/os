@@ -1,13 +1,16 @@
 package:
   name: freerdp-3
-  version: "3.20.0"
-  epoch: 0
+  version: "3.22.0"
+  epoch: 2 # go/wolfi-rsc/freerdp-3
   description: FreeRDP client
   copyright:
     - license: Apache-2.0
   dependencies:
     provides:
       - freerdp=${{package.full-version}}
+  resources:
+    cpu: "1"
+    memory: 8Gi
 
 environment:
   contents:
@@ -38,8 +41,8 @@ environment:
       - libxext-dev
       - libxi-dev
       - libxinerama-dev
-      - libxkb-dev
       - libxkbcommon-dev
+      - libxkbfile-dev
       - libxrender-dev
       - libxslt
       - libxv-dev
@@ -54,7 +57,7 @@ pipeline:
     with:
       repository: https://github.com/FreeRDP/FreeRDP
       tag: ${{package.version}}
-      expected-commit: b8e790a02ede8dd64ff7177fb9027d1844e66bb6
+      expected-commit: e3ef4c71138f76516299cb3637d2d0c59b2a3737
 
   - runs: |
       CFLAGS="$CFLAGS -fPIC" \
@@ -106,6 +109,9 @@ subpackages:
   - name: ${{package.name}}-dev
     pipeline:
       - uses: split/dev
+    test:
+      pipeline:
+        - uses: test/pkgconf
     dependencies:
       runtime:
         - freerdp-3

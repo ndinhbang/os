@@ -1,7 +1,7 @@
 package:
   name: ruby-4.0
-  version: "4.0.0"
-  epoch: 0
+  version: "4.0.1"
+  epoch: 1 # go/wolfi-rsc/ruby-4.0
   description: "the Ruby programming language"
   copyright:
     - license: Ruby
@@ -19,6 +19,9 @@ package:
       - libgcc
       - yaml
       - zlib
+  resources:
+    cpu: "8"
+    memory: 15Gi
 
 environment:
   contents:
@@ -64,7 +67,7 @@ pipeline:
     with:
       repository: https://github.com/ruby/ruby
       tag: v${{package.version}}
-      expected-commit: 553f1675f3a9cece340b90f374a4245dccac2272
+      expected-commit: e04267a14b1a5dea2d2c368e48d41bd3db441f4f
 
   - uses: patch
     with:
@@ -145,14 +148,11 @@ subpackages:
 
 update:
   enabled: true
-  version-transform:
-    - match: "_"
-      replace: .
   github:
     identifier: ruby/ruby
     strip-prefix: v
     use-tag: true
-    tag-filter-prefix: v4_0_
+    tag-filter-prefix: v4.0
 
 test:
   environment:

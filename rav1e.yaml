@@ -1,10 +1,13 @@
 package:
   name: rav1e
   version: 0.8.1
-  epoch: 1
+  epoch: 3 # go/wolfi-rsc/rav1e
   description: The fastest and safest AV1 encoder.
   copyright:
     - license: BSD-2-Clause
+  resources:
+    cpu: "11"
+    memory: 11Gi
 
 environment:
   contents:
@@ -49,6 +52,9 @@ subpackages:
     description: ${{package.name}} static libraries
     pipeline:
       - uses: split/static
+    test:
+      pipeline:
+        - uses: test/tw/emptypackage
 
 test:
   pipeline:

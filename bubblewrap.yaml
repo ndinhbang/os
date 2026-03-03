@@ -1,10 +1,13 @@
 package:
   name: bubblewrap
   version: 0.11.0
-  epoch: 1
+  epoch: 3 # go/wolfi-rsc/bubblewrap
   description: "Unprivileged sandboxing tool"
   copyright:
     - license: LGPL-2.0-or-later
+  resources:
+    cpu: "1"
+    memory: 1Gi
 
 environment:
   contents:
@@ -41,6 +44,9 @@ subpackages:
     dependencies:
       runtime:
         - bubblewrap
+    test:
+      pipeline:
+        - uses: test/tw/shell-syntax-check
 
   - name: bubblewrap-zsh-completion
     description: zsh completion for bubblewrap
@@ -54,6 +60,9 @@ subpackages:
     dependencies:
       runtime:
         - bubblewrap
+    test:
+      pipeline:
+        - uses: test/tw/shell-syntax-check
 
 update:
   enabled: true

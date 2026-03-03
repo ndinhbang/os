@@ -1,10 +1,13 @@
 package:
   name: yajl
   version: 2.1.0
-  epoch: 8
+  epoch: 10 # go/wolfi-rsc/yajl
   description: Yet Another JSON Library (YAJL)
   copyright:
     - license: ISC
+  resources:
+    cpu: "2"
+    memory: 4Gi
 
 environment:
   contents:
@@ -41,6 +44,9 @@ subpackages:
     pipeline:
       - uses: split/static
     description: yajl static
+    test:
+      pipeline:
+        - uses: test/tw/staticpackage
 
   - name: yajl-dev
     pipeline:
